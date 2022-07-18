@@ -2,22 +2,20 @@ require_relative './user'
 require_relative './database_connection'
 DatabaseConnection.connect('users')
 class UserRepository
-    
-    def self.instance
-        @instance ||= self.new
+    def entry_to_user(entry)
+        user = User.new 
+        user.id = entry['id']
+        user.name = entry['name']
+        user.email = entry['email']
+        user.password = entry['password']
+        return user
     end
-
     def all 
         @users = []
         sql = 'SELECT * FROM users;'
         result = DatabaseConnection.exec_params(sql, [])
         result.each do |item|
-            user = User.new 
-            user.id = item['id']
-            user.name = item['name']
-            user.email = item['email']
-            user.password = item['password']
-            @users << user
+            entry_to_user(item)
         end 
         return @users
     end 
@@ -26,12 +24,8 @@ class UserRepository
         sql = 'SELECT * FROM users WHERE email = $1;'
         params = [email]
         result = DatabaseConnection.exec_params(sql, params)
-        record = result[0]
-        user = User.new
-        user.id = record['id']
-        user.name = record['name']
-        user.email= record['email']
-        user.password = record['password']
+        entry = result[0]
+        entry_to_user(entry)
         return user
     end
         
