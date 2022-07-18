@@ -1,6 +1,6 @@
 require_relative './user'
 require_relative './database_connection'
-DatabaseConnection.connect('users')
+DatabaseConnection.connect('makersbnb')
 class UserRepository
     def entry_to_user(entry)
         user = User.new 
@@ -11,13 +11,15 @@ class UserRepository
         return user
     end
     def all 
-        @users = []
+        users = []
         sql = 'SELECT * FROM users;'
         result = DatabaseConnection.exec_params(sql, [])
+        p result
         result.each do |item|
-            entry_to_user(item)
+            user = entry_to_user(item)
+            users << user
         end 
-        return @users
+        return users
     end 
 
     def find(email)
@@ -25,18 +27,17 @@ class UserRepository
         params = [email]
         result = DatabaseConnection.exec_params(sql, params)
         entry = result[0]
-        entry_to_user(entry)
+        user = entry_to_user(entry)
         return user
     end
         
-    def self.create(name, email, password)
+    def create(user)
         params = [user.name, user.email, user.password]
-        result = DatabaseConnection.query("INSERT INTO users (name, email, password) VALUES($1, $2, $3);", params)
-        
+        result = DatabaseConnection.exec_params("INSERT INTO users (name, email, password) VALUES($1, $2, $3);", params)
     end
 
     def password_checker(email, password)
-        result = DatabaseConnection.query("SELECT password FROM users WHERE email = $1")
+        result = DatabaseConnection.exec_params("SELECT password FROM users WHERE email = $1", [email])
         if result[0]['password'] == password
             return true
         else 
