@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS requests;
 
 
 
+
 CREATE TABLE users (id SERIAL PRIMARY KEY, name TEXT, email TEXT, password TEXT);
 CREATE TABLE properties (id SERIAL PRIMARY KEY, name TEXT, location TEXT, description TEXT, price DECIMAL, user_id INT, CONSTRAINT fk_users FOREIGN KEY(user_id) REFERENCES users(id));
 CREATE TABLE requests (id SERIAL PRIMARY KEY, booker_id INT, lister_id INT, property_id INT, date DATE, confirmed INTEGER, CONSTRAINT fk_booker_id FOREIGN KEY (booker_id) REFERENCES users(id), CONSTRAINT fk_lister_id FOREIGN KEY(lister_id) REFERENCES users(id), CONSTRAINT fk_property_id FOREIGN KEY(property_id) REFERENCES properties(id));

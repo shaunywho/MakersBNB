@@ -3,7 +3,7 @@ require 'pg'
 class DatabaseConnection
 
   def self.connect(dbname)
-    @connection = PG.connect({hostname: '127.0.0.1', dbname: dbname})
+    @connection = PG.connect({host: '127.0.0.1', dbname: dbname})
   end 
 
   def self.exec_params(query, params)
