@@ -1,7 +1,5 @@
 require_relative './request'
 require_relative './database_connection'
-require_relative './requests_for_me'
-require_relative './request_from_me'
 
 class RequestsRepository
     def all
@@ -67,7 +65,7 @@ class RequestsRepository
             return nil
         else
             result_set.each do |result|
-                request = RequestForMe.new
+                request = Request.new
                 request.id = result['id']
                 request.booker_name = result['booker_name']
                 request.booker_email = result['booker_email']
@@ -104,7 +102,7 @@ class RequestsRepository
             return nil
         else
             result_set.each do |result|
-                request = RequestFromMe.new
+                request = Request.new
                 request.id = result["id"]
                 request.property = result['property']
                 request.location = result['location']
@@ -119,8 +117,15 @@ class RequestsRepository
         end
     end
 
-    def confirm_request(request_id)
-        
+    def confirm_request(request_id,change)
+        if change == 1
+            sql = "UPDATE requests SET confirmed = 1 WHERE id=$1;"
+        elsif change == 0
+            sql = "UPDATE requests SET confirmed = 0 WHERE id=$1;"
+        end
+        sql_param = [request_id]
+        DatabaseConnection.exec_params(sql,sql_param)
+
         
     end
 end

@@ -132,10 +132,10 @@ describe RequestsRepository do
         end
     end
 
-    context "change confirmed" do
-        it "" do
+    context "confirm request method" do
+        it "changes the confirmed from 0 to 1" do
             repo = RequestsRepository.new
-            repo.confirm_request(2)
+            repo.confirm_request(2,1)
             request = repo.find_request(2)
             expect(request.confirmed).to eq "1"
         end
