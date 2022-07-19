@@ -111,4 +111,20 @@ describe PropertyRepository do
     expect(properties[0].availability).to eq "t"
     expect(properties[1].user_id).to eq 1
   end
+
+  context 'updates the property availablity' do
+    it 'sets availablity to false' do
+      repo = PropertyRepository.new
+      repo.update_availability(5, "f")
+
+      properties = repo.all
+      expect(properties[4].id).to eq 5
+      expect(properties[4].name).to eq 'house5'
+      expect(properties[4].location).to eq 'place5'
+      expect(properties[4].description).to eq 'description5'
+      expect(properties[4].price).to eq 15.99
+      expect(properties[4].availability).to eq "f"
+      expect(properties[4].user_id).to eq 1
+    end
+  end
 end

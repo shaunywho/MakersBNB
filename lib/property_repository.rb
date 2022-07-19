@@ -35,9 +35,16 @@ class PropertyRepository
     return get_properties(result_set)
   end
 
-  def update__availability
+  def update_availability(id, value)
+    sql = 'UPDATE properties SET availability = $2 WHERE id = $1;'
 
+    DatabaseConnection.exec_params(sql, [id, value])
   end
+
+  def property_owner
+    
+
+  end 
   
   private
 
