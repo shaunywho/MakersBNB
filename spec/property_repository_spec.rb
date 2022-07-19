@@ -34,6 +34,7 @@ describe PropertyRepository do
     expect(properties.location).to eq 'place1'
     expect(properties.description).to eq 'description1'
     expect(properties.price).to eq 9.99
+    expect(properties.availability).to eq "t"
     expect(properties.user_id).to eq 1
   end
 
@@ -47,6 +48,7 @@ describe PropertyRepository do
     expect(properties[0].location).to eq 'place1'
     expect(properties[0].description).to eq 'description1'
     expect(properties[0].price).to eq 9.99
+    expect(properties[0].availability).to eq "t"
     expect(properties[0].user_id).to eq 1
 
     expect(properties[2].id).to eq 3
@@ -54,6 +56,7 @@ describe PropertyRepository do
     expect(properties[2].location).to eq 'place3'
     expect(properties[2].description).to eq 'description3'
     expect(properties[2].price).to eq 13.99
+    expect(properties[2].availability).to eq "t"
     expect(properties[2].user_id).to eq 3
 
     expect(properties[4].id).to eq 5
@@ -61,6 +64,7 @@ describe PropertyRepository do
     expect(properties[4].location).to eq 'place5'
     expect(properties[4].description).to eq 'description5'
     expect(properties[4].price).to eq 15.99
+    expect(properties[4].availability).to eq "t"
     expect(properties[4].user_id).to eq 1
   end
 
@@ -70,6 +74,7 @@ describe PropertyRepository do
     property.location = 'place6'
     property.description = 'description6'
     property.price = 11.99
+    property.availability = "t"
     property.user_id = 4
 
     repo = PropertyRepository.new
@@ -80,6 +85,7 @@ describe PropertyRepository do
     expect(properties.last.location).to eq 'place6'
     expect(properties.last.description).to eq 'description6'
     expect(properties.last.price).to eq 11.99
+    expect(properties.last.availability).to eq "t"
     expect(properties.last.user_id).to eq 4
   end
 
@@ -94,6 +100,7 @@ describe PropertyRepository do
     expect(properties[0].location).to eq 'place1'
     expect(properties[0].description).to eq 'description1'
     expect(properties[0].price).to eq 9.99
+    expect(properties[0].availability).to eq "t"
     expect(properties[0].user_id).to eq 1
 
     expect(properties[1].id).to eq 5
@@ -101,6 +108,7 @@ describe PropertyRepository do
     expect(properties[1].location).to eq 'place5'
     expect(properties[1].description).to eq 'description5'
     expect(properties[1].price).to eq 15.99
+    expect(properties[0].availability).to eq "t"
     expect(properties[1].user_id).to eq 1
   end
 end

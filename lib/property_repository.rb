@@ -17,12 +17,13 @@ class PropertyRepository
 
   def create(property)
     sql = 'INSERT INTO properties 
-          (name, location, description, price, user_id) 
-          VALUES ($1, $2, $3, $4, $5);'
+          (name, location, description, price, availability, user_id) 
+          VALUES ($1, $2, $3, $4, $5, $6);'
     params = [property.name,
     property.location,
     property.description,
     property.price,
+    property.availability,
     property.user_id]
     DatabaseConnection.exec_params(sql, params)
   end
@@ -32,6 +33,10 @@ class PropertyRepository
     result_set = DatabaseConnection.exec_params(sql, [user_id])
     
     return get_properties(result_set)
+  end
+
+  def update__availability
+
   end
   
   private
@@ -45,6 +50,7 @@ class PropertyRepository
       property.location = record['location']
       property.description = record['description']
       property.price = record['price'].to_f
+      property.availability = record['availability']
       property.user_id = record['user_id'].to_i
       properties << property
     end
