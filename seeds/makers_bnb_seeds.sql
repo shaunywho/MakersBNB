@@ -1,8 +1,7 @@
-<<<<<<< HEAD
+
 -- DROP DATABASE IF EXISTS makersbnb;
 -- CREATE DATABASE IF NOT EXISTS makersbnb;
-=======
->>>>>>> main
+
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS properties CASCADE;
 DROP TABLE IF EXISTS requests;
