@@ -14,7 +14,6 @@ class UserRepository
         users = []
         sql = 'SELECT * FROM users;'
         result = DatabaseConnection.exec_params(sql, [])
-        p result
         result.each do |item|
             user = entry_to_user(item)
             users << user
@@ -38,9 +37,11 @@ class UserRepository
 
     def password_checker(email, password)
         result = DatabaseConnection.exec_params("SELECT password FROM users WHERE email = $1", [email])
-        if result[0]['password'] == password
-            return true
-        else 
+        if result.to_a.length > 0
+            if result[0]['password'] == password
+                return true
+            end 
+        else
             return false
         end 
     end
