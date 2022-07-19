@@ -1,28 +1,15 @@
 require 'property_repository'
 
-def reset_users_table
+def reset_tables
   seed_sql = File.read('seeds/makers_bnb_seeds.sql')
   connection = PG.connect({ host: '127.0.0.1', dbname: 'makersbnb' })
   connection.exec(seed_sql)
 end
 
-def reset_propertiess_table
-  seed_sql = File.read('seeds/makers_bnb_seeds.sql')
-  connection = PG.connect({ host: '127.0.0.1', dbname: 'makersbnb' })
-  connection.exec(seed_sql)
-end
-
-def reset_requests_table
-  seed_sql = File.read('seeds/makers_bnb_seeds.sql')
-  connection = PG.connect({ host: '127.0.0.1', dbname: 'makersbnb' })
-  connection.exec(seed_sql)
-end
   
 describe PropertyRepository do
   before(:each) do
-    reset_users_table
-    reset_propertiess_table
-    reset_requests_table
+    reset_tables 
   end
 
   it 'finds and returns one property using id' do
