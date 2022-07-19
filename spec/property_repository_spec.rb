@@ -1,13 +1,13 @@
 require 'property_repository'
+require 'database_connection'
 
 def reset_tables
   seed_sql = File.read('seeds/makers_bnb_seeds.sql')
-  connection = PG.connect({ host: '127.0.0.1', dbname: 'makersbnb' })
-  connection.exec(seed_sql)
+  DatabaseConnection.exec(seed_sql)
 end
 
   
-describe PropertyRepository do
+RSpec.describe PropertyRepository do
   before(:each) do
     reset_tables 
   end
@@ -15,7 +15,9 @@ describe PropertyRepository do
   it 'finds and returns one property using id' do
     repo = PropertyRepository.new
     properties = repo.find(1)
-
+    p '------------------------'
+    p properties
+    p '------------------------'
     expect(properties.id).to eq 1
     expect(properties.name).to eq 'house1'
     expect(properties.location).to eq 'place1'

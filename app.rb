@@ -2,8 +2,8 @@ require 'sinatra'
 require "sinatra/reloader"
 require_relative 'lib/database_connection'
 require_relative 'lib/user_repository'
-# require_relative 'lib/property_repository'
-# require_relative 'lib/request_repository'
+require_relative 'lib/property_repository'
+require_relative 'lib/request_repository'
 
 DatabaseConnection.connect('makersbnb')
 # DatabaseConnection.exec(File.read('./seeds/makers_bnb_seed.sql'))
@@ -16,6 +16,19 @@ class Application < Sinatra::Base
 
   enable :sessions
 
+  def session?
+    if session[:id] && session[:name] && session[:email] != nil
+      return true
+    else
+      return false
+    end 
+  end 
+
+  def set_session(id, name, email)
+    session[:id],session[:name], session[:email] = id, name, email
+  end 
+
+
   get '/' do
     # button to login 
     @error = false
@@ -23,23 +36,26 @@ class Application < Sinatra::Base
   end 
   
   get '/signup' do 
-    return erb(:signup) # form for signup and redirect to user_page
+    if session?
+      return erb(:user_page)
+    else 
+      return erb(:signup) # form for signup and redirect to user_page
+    end 
   end
   
-  post '/login' do
+  post '/' do
     email = params[:email] 
     password = params[:password]
     user_repo = UserRepository.new
     user = user_repo.login(email, password)
     if user !=nil
-      session[:id] = user.id
-      session[:name] = user.name
-      session[:email] = user.email
-      return erb(:user)
+      set_session(user.id, user.name, user.email)
+      return redirect '/user_page'
     else
       @error = true
       return erb(:index)
     end 
+  
     # if loging in is successful
   end 
   
@@ -50,10 +66,8 @@ class Application < Sinatra::Base
       user_repo = UserRepository.new
       user  = user_repo.signup(name,email,password)
       if user != nil
-        session[:id] = user.id
-        session[:name] = user.name
-        session[:email] = user.email
-        return erb(:user)
+        set_session(user.id, user.name, user.email)
+        return redirect '/user_page'
       else
         @error = true
         return erb(:signup)
@@ -99,13 +113,19 @@ class Application < Sinatra::Base
     redirect '/requests_to_me'
   end
 
-  get '/user_page' do 
-    @name = session[:name]
-    @email = session[:email]
+  get '/user_page' do
+    if session?
+      @name = session[:name]
+      @email = session[:email]
     # user details
     # buttons to properties
     # buttons to request
-    return erb(:user)
+      return erb(:user_page)
+    else
+      return erb(:index)
+    end 
+
   end
+
 
 end 

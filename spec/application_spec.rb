@@ -8,6 +8,13 @@ RSpec.describe Application do
 
   include Rack::Test::Methods
 
+  RSpec::Matchers.define(:redirect_to) do |path|
+    match do |response|
+      uri = URI.parse(response.headers['Location'])
+      response.status.to_s[0] == "3" && uri.path == path
+    end
+  end
+
   def reset_user_table
     seed_sql = File.read('seeds/makers_bnb_seeds.sql')
     DatabaseConnection.exec(seed_sql)
@@ -27,19 +34,16 @@ RSpec.describe Application do
         expect(response.body).to include('<input type="password" name="password" />')
     end 
 
-    it 'returns ' do 
-    end
   end
 
-  context 'POST /login' do 
+  context 'POST /' do 
     it 'returns user_page' do 
-        response = post('/login', email: 'shaunho@gmail.com', password: 'password')
-        expect(response.status).to eq 200
-        expect(response.body).to include('Name:')
+        response = post('/', email: 'shaunho@gmail.com', password: 'password')
+        expect(response).to redirect_to('/user_page')
     end 
 
     it 'fails when invalid email and password are provided' do 
-      response = post('/login', email: 'shaunho@gmail.com', password: 'wrongpassword')
+      response = post('/', email: 'shaunho@gmail.com', password: 'wrongpassword')
       expect(response.status).to eq 200
       expect(response.body).to include('Password or Email invalid')
     end 
@@ -50,8 +54,7 @@ RSpec.describe Application do
 
     it 'returns user_page' do
       response = post('/signup', name: 'testname', email: 'test@gmail.com', password: 'test')
-      expect(response.status).to eq 200
-      expect(response.body).to include('Name:')
+      expect(response).to redirect_to('/user_page')
     end 
 
     it 'fails when trying to signup with a used email' do
@@ -73,4 +76,12 @@ RSpec.describe Application do
 
   end 
       
+  context 'GET /user_page' do
+    it 'redirects to / when no session' do
+    response = get('/user_page')
+    expect(response.status).to eq 200
+    expect(response.body).to include('Email: <input type="text" name="email" /> ')
+    end 
+
+  end 
 end 

@@ -1,14 +1,15 @@
 require 'user_repository'
 require 'database_connection'
+
+
 RSpec.describe UserRepository do 
-    
-    def reset_user_table
+    def reset_table
         seed_sql = File.read('seeds/makers_bnb_seeds.sql')
         DatabaseConnection.exec(seed_sql)
     end
       
     before(:each) do 
-        reset_user_table
+        reset_table
     end
 
     it "returns all users" do

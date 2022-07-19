@@ -1,9 +1,9 @@
 require 'request_repository'
+require 'database_connection'
 
 def reset_tables
-    seed_sql = File.read('spec/seeds/seeds.sql')
-    connection = PG.connect({ host: '127.0.0.1', dbname: 'makersbnb' })
-    connection.exec(seed_sql)
+    seed_sql = File.read('seeds/makers_bnb_seeds.sql')
+    DatabaseConnection.exec(seed_sql)
 end
   
 describe RequestsRepository do
