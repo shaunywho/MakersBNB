@@ -16,7 +16,7 @@ class Application < Sinatra::Base
 
   enable :sessions
 
-  def session?
+  def in_session?
     if session[:id] && session[:name] && session[:email] != nil
       return true
     else
@@ -36,7 +36,7 @@ class Application < Sinatra::Base
   end 
   
   get '/signup' do 
-    if session?
+    if in_session?
       return erb(:user_page)
     else 
       return erb(:signup) # form for signup and redirect to user_page
@@ -114,7 +114,7 @@ class Application < Sinatra::Base
   end
 
   get '/user_page' do
-    if session?
+    if in_session?
       @name = session[:name]
       @email = session[:email]
     # user details
@@ -126,6 +126,11 @@ class Application < Sinatra::Base
     end 
 
   end
+
+  get '/logout' do
+    session.clear
+    return erb(:index)
+  end 
 
 
 end 
