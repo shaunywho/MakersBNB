@@ -18,6 +18,7 @@ class Application < Sinatra::Base
 
   get '/' do
     # button to login 
+    @error = false
     return erb(:index) # form for login in and redirect to user_page
   end 
   
@@ -30,7 +31,7 @@ class Application < Sinatra::Base
     password = params[:password]
     user_repo = UserRepository.new
     user = user_repo.login(email, password)
-    if user
+    if user !=nil
       session[:id] = user.id
       session[:name] = user.name
       session[:email] = user.email
@@ -52,7 +53,7 @@ class Application < Sinatra::Base
         session[:id] = user.id
         session[:name] = user.name
         session[:email] = user.email
-        return redirect('/user_page')
+        return erb(:user)
       else
         @error = true
         return erb(:signup)

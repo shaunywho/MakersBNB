@@ -53,13 +53,17 @@ class UserRepository
     end
 
     def signup(name, email, password)
-        email_match = find(email)
-        if email_match.to_a.length > 0
-          return nil
-        else
-            user = email_match
+        user = find(email)
+        if user == nil
+            user = User.new
+            user.name = name
+            user.email = email
+            user.password = password
             user.id = create(user)
-            return user.id
+            return user
+        else
+            return nil
+
         end 
     end 
 

@@ -47,6 +47,7 @@ RSpec.describe Application do
   end
 
   context 'POST /signup' do
+
     it 'returns user_page' do
       response = post('/signup', name: 'testname', email: 'test@gmail.com', password: 'test')
       expect(response.status).to eq 200
@@ -56,15 +57,20 @@ RSpec.describe Application do
     it 'fails when trying to signup with a used email' do
       response = post('/signup', name: 'testname', email: 'shaunho@gmail.com', password: 'wrongpassword')
       expect(response.status).to eq 200
-      expect(response.body).to include('Password or Email invalid')
+      expect(response.body).to include('Email already exists')
 
+    end 
+  
+  end
+
+  context 'GET /signup' do
+
+    it 'returns signup page' do
+      response = get('/signup')
+      expect(response.status).to eq 200
+      expect(response.body).to include('<input type="submit" value="Create User"/>')
     end 
 
   end 
-
-
       
-
-
-
 end 
