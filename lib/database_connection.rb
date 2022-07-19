@@ -1,3 +1,4 @@
+
 require 'pg'
 
 class DatabaseConnection
