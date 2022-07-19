@@ -41,10 +41,27 @@ class PropertyRepository
     DatabaseConnection.exec_params(sql, [id, value])
   end
 
-  def property_owner
-    
+  def property_owner(id)
+    sql = 'SELECT properties.id, properties.name, properties.availability, properties.price, properties.description, users.name AS owner_name, users.email AS owner_email 
+    FROM properties 
+    JOIN users ON users.id = properties.user_id
+    WHERE properties.user_id = $1;'
 
-  end 
+    result_set = DatabaseConnection.exec_params(sql, [id])
+    properties = []
+    result_set.each do |record|
+      property = Property.new
+      property.id = record['id'].to_i
+      property.name = record['name']
+      property.availability = record['availability']
+      property.price = record['price']
+      property.description = record['description']
+      property.owner_name = record['owner_name']
+      property.owner_email = record['owner_email']
+      properties << property
+    end
+    return properties
+  end
   
   private
 
