@@ -25,9 +25,14 @@ class UserRepository
         sql = 'SELECT * FROM users WHERE email = $1;'
         params = [email]
         result = DatabaseConnection.exec_params(sql, params)
-        entry = result[0]
-        user = entry_to_user(entry)
-        return user
+        if result.to_a.length>0
+            entry = result[0]
+            user = entry_to_user(entry)
+            return user
+        else
+            return nil
+
+        end 
     end
         
     def create(user)
@@ -45,4 +50,5 @@ class UserRepository
             return false
         end 
     end
+
 end
