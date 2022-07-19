@@ -5,8 +5,6 @@ require_relative 'lib/user_repository'
 # require_relative 'lib/property_repository'
 # require_relative 'lib/request_repository'
 
-
-
 DatabaseConnection.connect('makersbnb')
 # DatabaseConnection.exec(File.read('./seeds/makers_bnb_seed.sql'))
 
@@ -15,11 +13,11 @@ class Application < Sinatra::Base
     register Sinatra::Reloader
     also_reload 'lib/user_repository'
   end
+
   enable :sessions
 
   get '/' do
     # button to login 
-
     return erb(:index) # form for login in and redirect to user_page
   end 
   
@@ -31,24 +29,35 @@ class Application < Sinatra::Base
     email = params[:email] 
     password = params[:password]
     user_repo = UserRepository.new
-    success = user_repo.password_checker(email, password)
-    if success
-      user = user_repo.find(email)
+    user = user_repo.login(email, password)
+    if user
       session[:id] = user.id
-      redirect('/user_page')
+      session[:name] = user.name
+      session[:email] = user.email
+      return erb(:user)
     else
       @error = true
       return erb(:index)
-      
     end 
     # if loging in is successful
   end 
   
   post '/signup' do
-
-    # if loging up is successful
-      # session[id] = user.id
-      return redirect('/user_page')
+      name = params[:name]
+      email = params[:email]
+      password = params[:password]
+      user_repo = UserRepository.new
+      user  = user_repo.signup(name,email,password)
+      if user != nil
+        session[:id] = user.id
+        session[:name] = user.name
+        session[:email] = user.email
+        return redirect('/user_page')
+      else
+        @error = true
+        return erb(:signup)
+      end
+      
   end
   
   post '/create_property' do
@@ -80,7 +89,7 @@ class Application < Sinatra::Base
     return erb(:requests_by_me)
   end
   
-  get '/requests_to_me' do 
+  get '/requests_to_m' do 
     return erb(:requests_to_me)
   end
 
@@ -90,9 +99,12 @@ class Application < Sinatra::Base
   end
 
   get '/user_page' do 
+    @name = session[:name]
+    @email = session[:email]
     # user details
     # buttons to properties
     # buttons to request
+    return erb(:user)
   end
 
 end 

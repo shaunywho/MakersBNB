@@ -50,7 +50,8 @@ RSpec.describe UserRepository do
     end 
     it "checks password" do 
         repo = UserRepository.new
-        user = repo.password_checker('shaunho@gmail.com', 'password')
-        expect(user).to eq true
+        user = repo.login('shaunho@gmail.com', 'password')
+        user
+        expect(user).to have_attributes({email: 'shaunho@gmail.com', password: 'password', id: '1', name: 'Shaun' })
     end
 end 
