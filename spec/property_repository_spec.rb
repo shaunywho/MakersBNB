@@ -15,9 +15,6 @@ RSpec.describe PropertyRepository do
   it 'finds and returns one property using id' do
     repo = PropertyRepository.new
     properties = repo.find(1)
-    p '------------------------'
-    p properties
-    p '------------------------'
     expect(properties.id).to eq 1
     expect(properties.name).to eq 'house1'
     expect(properties.location).to eq 'place1'
