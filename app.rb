@@ -16,17 +16,27 @@ class Application < Sinatra::Base
 
   enable :sessions
 
-  def in_session?
-    if session[:id] && session[:name] && session[:email] != nil
-      return true
-    else
-      return false
-    end 
-  end 
-
+  # def in_session?
+  #   if session[:id] && session[:name] && session[:email] != nil
+  #     return true
+  #   else
+  #     return false
+  #   end 
+  # end 
   def set_session(id, name, email)
     session[:id],session[:name], session[:email] = id, name, email
   end 
+
+  def in_session?
+    return true
+  end 
+  
+  def set_session(id, name, email)
+    session[:id], session[:name], session[:email] = 1, 'Shaun', 'shaunho@gmail.com'
+
+  end
+
+
 
 
   get '/' do
@@ -103,8 +113,7 @@ class Application < Sinatra::Base
   end
 
   get '/properties/:id' do
-    @property = PropertyRepository.new.find(params[:id])
-     
+    @property = PropertyRepository.new.find(params[:id]) 
     # buttons to user
     # buttons to request  
     return erb(:property_id)
