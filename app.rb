@@ -37,7 +37,7 @@ class Application < Sinatra::Base
   
   get '/signup' do 
     if in_session?
-      return erb(:user_page)
+      return erb(:user)
     else 
       return erb(:signup) # form for signup and redirect to user_page
     end 
@@ -77,7 +77,7 @@ class Application < Sinatra::Base
   
   post '/create_property' do
     @properties = PropertyRepository.new
-    return redirect('/properties_page')
+    return redirect('/properties')
   end
 
   post '/create_request' do
@@ -85,24 +85,24 @@ class Application < Sinatra::Base
       return redirect('/requests_by_me')
   end
 
-  get '/properties_page' do
+  get '/properties' do
     @properties = PropertyRepository.new
     # property's details
     return erb(:properties)
   end
 
-  get '/properties_page/:id' do
+  get '/properties/:id' do
     # buttons to user
     # buttons to request  
     return erb(:property_info)
   end 
 
 
-  get '/requests_by_me' do
+  get '/requests' do
     # lists properties I've requested
     # shows whether request is confirmed or not
     # buttons that redirect to properties_page/:id
-    return erb(:requests_by_me)
+    return erb(:requests)
   end
   
   get '/requests_to_m' do 
