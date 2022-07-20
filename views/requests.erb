@@ -21,10 +21,10 @@
           <a class="nav-link disabled" href="#">Requests</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">User</a>
+          <a class="nav-link" href="/user_page">My account</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Logout</a>
+          <a class="nav-link" href="/logout">Logout</a>
         </li>
       </ul>
     </div>
@@ -36,45 +36,52 @@
 
 
 <h2>Requests from me</h2>
-  <%@requests_from_me.each do |request|%>
-    <div class="row">
-      <div class="col">
-      </div>
-      <div class="col-6">
-        <div class="card" style="margin-bottom:20px;">
-          <h5 class="card-header"><%=request.property%></h5>
-          <div class="card-body">
-            <h5 class="card-title"><%=request.location%></h5>
-            <p class="card-text">Date of the request: <%=request.date%>, confirmation: <%=request.confirmed%></p>
-            <a href="#" class="btn btn-primary">Details</a>
+  <%if @requests_from_me != nil%>
+    <%@requests_from_me.each do |request|%>
+      <div class="row">
+        <div class="col">
+        </div>
+        <div class="col-6">
+          <div class="card" style="margin-bottom:20px;">
+            <h5 class="card-header"><%=request.property%></h5>
+            <div class="card-body">
+              <h5 class="card-title"><%=request.location%></h5>
+              <p class="card-text">Date of the request: <%=request.date%>, confirmation: <%=request.confirmed%></p>
+              <a href="#" class="btn btn-primary">Details</a>
+            </div>
           </div>
         </div>
+        <div class="col">
+        </div>
       </div>
-      <div class="col">
-      </div>
-    </div>
+    <%end%>
+  <%else%>
+    <p>There are no requests from you</p>
   <%end%>
 
 <h2>Requests for me</h2>
 
-
-<%@requests_for_me.each do |request|%>
-    <div class="row">
-      <div class="col">
-      </div>
-      <div class="col-6">
-        <div class="card" style="margin-bottom:20px;">
-          <h5 class="card-header"><%=request.property%></h5>
-          <div class="card-body">
-            <h5 class="card-title"><%=request.location%></h5>
-            <p class="card-text">Date of the request: <%=request.date%>, confirmation: <%=request.confirmed%></p>
-            <a href="#" class="btn btn-primary">Details</a>
+  <%if @requests_for_me != nil%>
+    <%@requests_for_me.each do |request|%>
+        <div class="row">
+          <div class="col">
+          </div>
+          <div class="col-6">
+            <div class="card" style="margin-bottom:20px;">
+              <h5 class="card-header"><%=request.property%></h5>
+              <div class="card-body">
+                <h5 class="card-title"><%=request.location%></h5>
+                <p class="card-text">Date of the request: <%=request.date%>, confirmation: <%=request.confirmed%></p>
+                <a href="#" class="btn btn-primary">Details</a>
+              </div>
+            </div>
+          </div>
+          <div class="col">
           </div>
         </div>
-      </div>
-      <div class="col">
-      </div>
-    </div>
+      <%end%>
+  <%else%>
+    <p>There are no requests for you</p>
   <%end%>
 </div>
 </body>

@@ -1,14 +1,15 @@
 require 'user_repository'
 require 'database_connection'
+
+
 RSpec.describe UserRepository do 
-    
-    def reset_user_table
+    def reset_table
         seed_sql = File.read('seeds/makers_bnb_seeds.sql')
         DatabaseConnection.exec(seed_sql)
     end
       
     before(:each) do 
-        reset_user_table
+        reset_table
     end
 
     it "returns all users" do
@@ -50,7 +51,8 @@ RSpec.describe UserRepository do
     end 
     it "checks password" do 
         repo = UserRepository.new
-        user = repo.password_checker('shaunho@gmail.com', 'password')
-        expect(user).to eq true
+        user = repo.login('shaunho@gmail.com', 'password')
+        user
+        expect(user).to have_attributes({email: 'shaunho@gmail.com', password: 'password', id: '1', name: 'Shaun' })
     end
 end 

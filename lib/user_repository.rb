@@ -2,6 +2,7 @@ require_relative './user'
 require_relative './database_connection'
 DatabaseConnection.connect('makersbnb')
 class UserRepository
+
     def entry_to_user(entry)
         user = User.new 
         user.id = entry['id']
@@ -10,6 +11,7 @@ class UserRepository
         user.password = entry['password']
         return user
     end
+
     def all 
         users = []
         sql = 'SELECT * FROM users;'
@@ -31,24 +33,38 @@ class UserRepository
             return user
         else
             return nil
-
         end 
     end
         
     def create(user)
         params = [user.name, user.email, user.password]
-        result = DatabaseConnection.exec_params("INSERT INTO users (name, email, password) VALUES($1, $2, $3);", params)
+        result = DatabaseConnection.exec_params("INSERT INTO users (name, email, password) VALUES($1, $2, $3) RETURNING ID;", params)[0]['id']
     end
 
-    def password_checker(email, password)
-        result = DatabaseConnection.exec_params("SELECT password FROM users WHERE email = $1", [email])
-        if result.to_a.length > 0
-            if result[0]['password'] == password
-                return true
+    def login(email, password)
+        user = find(email)   
+        if user != nil
+            if user.password  == password
+                return user
             end 
         else
-            return false
+            return nil
         end 
     end
+
+    def signup(name, email, password)
+        user = find(email)
+        if user == nil
+            user = User.new
+            user.name = name
+            user.email = email
+            user.password = password
+            user.id = create(user)
+            return user
+        else
+            return nil
+
+        end 
+    end 
 
 end
