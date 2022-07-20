@@ -37,9 +37,9 @@ RSpec.describe Application do
   end
 
   context 'POST /' do 
-    it 'returns user_page' do 
+    it 'returns user page' do 
         response = post('/', email: 'shaunho@gmail.com', password: 'password')
-        expect(response).to redirect_to('/user_page')
+        expect(response).to redirect_to('/user')
     end 
 
     it 'fails when invalid email and password are provided' do 
@@ -52,9 +52,9 @@ RSpec.describe Application do
 
   context 'POST /signup' do
 
-    it 'returns user_page' do
+    it 'returns user page' do
       response = post('/signup', name: 'testname', email: 'test@gmail.com', password: 'test')
-      expect(response).to redirect_to('/user_page')
+      expect(response).to redirect_to('/user')
     end 
 
     it 'fails when trying to signup with a used email' do
@@ -76,9 +76,9 @@ RSpec.describe Application do
 
   end 
       
-  context 'GET /user_page' do
+  context 'GET /user' do
     it 'redirects to / when no session' do
-    response = get('/user_page')
+    response = get('/user')
     expect(response.status).to eq 200
     expect(response.body).to include('<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">')
     end 
