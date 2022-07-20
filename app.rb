@@ -33,9 +33,7 @@ class Application < Sinatra::Base
     tempfile = params[:file][:tempfile] 
     user = UserRepository.new.find_by_id(session[:id])
     user_repo = UserRepository.new
-    user.profile_picture_path = "public/img/#{user.name}#{File.extname(tempfile)}"
-    FileUtils.cp(tempfile.path, user.profile_picture_path)
-    user_repo.add_photo(user)
+    user_repo.add_photo(user, tempfile)
     redirect '/user'
   end
   get '/' do
@@ -101,7 +99,6 @@ class Application < Sinatra::Base
 
   get '/properties' do
     @properties = PropertyRepository.new.all
-    p @properties.length
     # property's details
     return erb(:properties)
   end

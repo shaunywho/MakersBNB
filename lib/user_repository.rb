@@ -54,7 +54,10 @@ class UserRepository
         params = [user.name, user.email, user.password]
         result = DatabaseConnection.exec_params("INSERT INTO users (name, email, password) VALUES($1, $2, $3) RETURNING ID;", params)[0]['id']
     end
-    def add_photo(user)
+    def add_photo(user, tempfile)
+        user.profile_picture_path = File.join('img',"#{user.name}#{File.extname(tempfile)}")
+        save_path = File.join('public',user.profile_picture_path)
+        FileUtils.cp(tempfile.path,save_path)
         params = [user.profile_picture_path, user.id]
         DatabaseConnection.exec_params("UPDATE users SET profile_picture_path = $1 WHERE id = $2",params)
     end
