@@ -6,7 +6,7 @@ require_relative 'lib/property_repository'
 require_relative 'lib/request_repository'
 
 DatabaseConnection.connect('makersbnb')
-#DatabaseConnection.exec(File.read('./seeds/makers_bnb_seeds.sql'))
+DatabaseConnection.exec(File.read('./seeds/makers_bnb_seeds.sql'))
 
 class Application < Sinatra::Base
   configure :development do

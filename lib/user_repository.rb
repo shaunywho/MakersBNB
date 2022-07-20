@@ -9,6 +9,7 @@ class UserRepository
         user.name = entry['name']
         user.email = entry['email']
         user.password = entry['password']
+        user.profile_picture_path = entry['profile_picture_path']
         return user
     end
 
