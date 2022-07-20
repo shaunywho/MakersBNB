@@ -19,16 +19,25 @@ class Application < Sinatra::Base
   enable :sessions
 
   def in_session?
-    if session[:id] && session[:name] && session[:email] != nil
+    if session[:id] != nil
       return true
     else
       return false
     end 
   end 
-  def set_session(id, name, email)
-    session[:id],session[:name], session[:email] = id, name, email
+  def set_session(id)
+    session[:id] = id
   end 
 
+  post '/add_photo' do
+    tempfile = params[:file][:tempfile] 
+    user = UserRepository.new.find_by_id(session[:id])
+    user_repo = UserRepository.new
+    user.profile_picture_path = "public/img/#{user.name}#{File.extname(tempfile)}"
+    FileUtils.cp(tempfile.path, user.profile_picture_path)
+    user_repo.add_photo(user)
+    redirect '/user'
+  end
   get '/' do
     # button to login 
     @error = false
@@ -49,7 +58,7 @@ class Application < Sinatra::Base
     user_repo = UserRepository.new
     user = user_repo.login(email, password)
     if user !=nil
-      set_session(user.id, user.name, user.email)
+      set_session(user.id)
       return redirect '/user'
     else
       @error = true
@@ -66,7 +75,7 @@ class Application < Sinatra::Base
       user_repo = UserRepository.new
       user  = user_repo.signup(name,email,password)
       if user != nil
-        set_session(user.id, user.name, user.email)
+        set_session(user.id)
         return redirect '/user'
       else
         @error = true
@@ -74,6 +83,7 @@ class Application < Sinatra::Base
       end
       
   end
+
 
   get '/create_property' do 
     return erb(:create_property)
@@ -125,8 +135,8 @@ class Application < Sinatra::Base
 
   get '/user' do
     if in_session?
-      @name = session[:name]
-      @email = session[:email]
+      @user = UserRepository.new.find_by_id(session[:id])
+      p @user.profile_picture_path
     # user details
     # buttons to properties
     # buttons to request

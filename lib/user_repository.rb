@@ -36,10 +36,27 @@ class UserRepository
             return nil
         end 
     end
+    
+    def find_by_id(id)
+        sql = 'SELECT * FROM users WHERE id = $1;'
+        params = [id]
+        result = DatabaseConnection.exec_params(sql, params)
+        if result.to_a.length>0
+            entry = result[0]
+            user = entry_to_user(entry)
+            return user
+        else
+            return nil
+        end 
+    end
         
     def create(user)
         params = [user.name, user.email, user.password]
         result = DatabaseConnection.exec_params("INSERT INTO users (name, email, password) VALUES($1, $2, $3) RETURNING ID;", params)[0]['id']
+    end
+    def add_photo(user)
+        params = [user.profile_picture_path, user.id]
+        DatabaseConnection.exec_params("UPDATE users SET profile_picture_path = $1 WHERE id = $2",params)
     end
 
     def login(email, password)
