@@ -30,8 +30,8 @@ RSpec.describe Application do
         response = get('/')
         expect(response.status).to eq 200
         expect(response.body).to include('form')
-        expect(response.body).to include(' <input type="text" name="email" /> ')
-        expect(response.body).to include('<input type="password" name="password" />')
+        expect(response.body).to include('<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">')
+        expect(response.body).to include('<input type="password" class="form-control" id="exampleInputPassword1" name="password">')
     end 
 
   end
@@ -80,7 +80,7 @@ RSpec.describe Application do
     it 'redirects to / when no session' do
     response = get('/user_page')
     expect(response.status).to eq 200
-    expect(response.body).to include('Email: <input type="text" name="email" /> ')
+    expect(response.body).to include('<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">')
     end 
 
   end 
