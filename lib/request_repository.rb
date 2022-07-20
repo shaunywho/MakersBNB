@@ -93,7 +93,7 @@ class RequestsRepository
         FROM requests
         JOIN properties ON properties.id = requests.property_id
         JOIN users ON users.id = requests.booker_id
-        WHERE requests.booker_id=$1;'
+        WHERE requests.booker_id = $1;'
 
         sql_param = [booker_id]
         result_set = DatabaseConnection.exec_params(sql,sql_param)

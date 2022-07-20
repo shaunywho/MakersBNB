@@ -104,16 +104,12 @@ class Application < Sinatra::Base
   end 
 
   get '/requests/:id' do 
-    @request = RequestRepository.new.requests_for_me(params[:id])
+    repo = RequestsRepository.new
+    @requests = repo.requests_for_me(params[:id])
     return erb(:request_id)
   end
 
-  get '/requests' do
-    # lists properties I've requested
-    # shows whether request is confirmed or not
-    # buttons that redirect to properties page/:id
-    return erb(:requests)
-  end
+  
   
   get '/requests_to_m' do 
     return erb(:requests_to_me)
@@ -144,7 +140,9 @@ class Application < Sinatra::Base
     #@requests_from_me = repo.requests_from_me(session[:id])
     if in_session?
       @requests_from_me = repo.requests_from_me(session[:id])
+      p repo.requests_from_me(session[:id])
       @requests_for_me = repo.requests_for_me(session[:id])
+      p repo.requests_for_me(session[:id])
       return erb(:requests)
     else
       return redirect '/'
