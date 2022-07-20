@@ -12,6 +12,8 @@ class Application < Sinatra::Base
   configure :development do
     register Sinatra::Reloader
     also_reload 'lib/user_repository'
+    also_reload 'lib/property_repository'
+    also_reload 'lib/request_repository'
   end
 
   enable :sessions
@@ -23,11 +25,9 @@ class Application < Sinatra::Base
       return false
     end 
   end 
-
   def set_session(id, name, email)
     session[:id],session[:name], session[:email] = id, name, email
   end 
-
 
   get '/' do
     # button to login 
@@ -80,16 +80,9 @@ class Application < Sinatra::Base
   end
   
   post '/create_property' do
-    property = Property.new
-    property.name = params[:name]
-    property.location = params[:location]
-    property.description = params[:description]
-    property.price = params[:price]
-    property.availability = "t"
-    
     property_repo = PropertyRepository.new
-    property_repo.create(property)
-    return redirect('/properties_page')
+    property_repo.create_property(params[:name], params[:location], params[:description], params[:price],'t', session[:id])
+    redirect '/properties'
   end
 
   post '/create_request' do
@@ -97,22 +90,27 @@ class Application < Sinatra::Base
   end
 
   get '/properties' do
-    @properties = PropertyRepository.new
+    @properties = PropertyRepository.new.all
+    p @properties.length
     # property's details
     return erb(:properties)
   end
 
   get '/properties/:id' do
+    @property = PropertyRepository.new.find(params[:id]) 
     # buttons to user
     # buttons to request  
-    return erb(:property_info)
+    return erb(:property_id)
   end 
 
+  get '/requests/:id' do 
+
+  end
 
   get '/requests' do
     # lists properties I've requested
     # shows whether request is confirmed or not
-    # buttons that redirect to properties_page/:id
+    # buttons that redirect to properties page/:id
     return erb(:requests)
   end
   
