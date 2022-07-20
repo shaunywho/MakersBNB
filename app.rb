@@ -104,7 +104,8 @@ class Application < Sinatra::Base
   end 
 
   get '/requests/:id' do 
-
+    @request = RequestRepository.new.requests_for_me(params[:id])
+    return erb(:request_id)
   end
 
   get '/requests' do
