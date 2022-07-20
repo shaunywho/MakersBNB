@@ -3,7 +3,7 @@ require "sinatra/reloader"
 require_relative 'lib/database_connection'
 require_relative 'lib/user_repository'
 # require_relative 'lib/property_repository'
-# require_relative 'lib/request_repository'
+require_relative 'lib/request_repository'
 
 
 
@@ -95,4 +95,20 @@ class Application < Sinatra::Base
     # buttons to request
   end
 
-end 
+  get '/requests' do
+    repo = RequestsRepository.new
+    #@requests_from_me = repo.requests_from_me(session[:id])
+    @requests_from_me = repo.requests_from_me(1)
+    @requests_for_me = repo.requests_for_me(2)
+    puts @requests_from_me[0].property
+
+    return erb(:requests)
+  end
+
+  post 'request_confirmation/:id' do
+    repo = RequestsRepository.new
+    request_param = params[:id]
+    @confirm = repo.confirm_request(request_param, 1)
+
+  end
+end
