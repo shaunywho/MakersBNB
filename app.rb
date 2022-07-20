@@ -32,14 +32,14 @@ class Application < Sinatra::Base
   get '/' do
     # button to login 
     @error = false
-    return erb(:index) # form for login in and redirect to user_page
+    return erb(:index) # form for login in and redirect to user page
   end 
   
   get '/signup' do 
     if in_session?
-      return erb(:user_page)
+      return erb(:user)
     else 
-      return erb(:signup) # form for signup and redirect to user_page
+      return erb(:signup) # form for signup and redirect to user page
     end 
   end
   
@@ -50,7 +50,7 @@ class Application < Sinatra::Base
     user = user_repo.login(email, password)
     if user !=nil
       set_session(user.id, user.name, user.email)
-      return redirect '/user_page'
+      return redirect '/user'
     else
       @error = true
       return erb(:index)
@@ -67,7 +67,7 @@ class Application < Sinatra::Base
       user  = user_repo.signup(name,email,password)
       if user != nil
         set_session(user.id, user.name, user.email)
-        return redirect '/user_page'
+        return redirect '/user'
       else
         @error = true
         return erb(:signup)
@@ -96,24 +96,24 @@ class Application < Sinatra::Base
       return redirect('/requests_by_me')
   end
 
-  get '/properties_page' do
+  get '/properties' do
     @properties = PropertyRepository.new
     # property's details
     return erb(:properties)
   end
 
-  get '/properties_page/:id' do
+  get '/properties/:id' do
     # buttons to user
     # buttons to request  
     return erb(:property_info)
   end 
 
 
-  get '/requests_by_me' do
+  get '/requests' do
     # lists properties I've requested
     # shows whether request is confirmed or not
     # buttons that redirect to properties_page/:id
-    return erb(:requests_by_me)
+    return erb(:requests)
   end
   
   get '/requests_to_m' do 
@@ -125,14 +125,14 @@ class Application < Sinatra::Base
     redirect '/requests_to_me'
   end
 
-  get '/user_page' do
+  get '/user' do
     if in_session?
       @name = session[:name]
       @email = session[:email]
     # user details
     # buttons to properties
     # buttons to request
-      return erb(:user_page)
+      return erb(:user)
     else
       return erb(:index)
     end 
