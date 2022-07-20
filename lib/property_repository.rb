@@ -29,6 +29,18 @@ class PropertyRepository
     DatabaseConnection.exec_params(sql, params)
   end
 
+  def create_property(name, location, description, price, availability, user_id)
+    property = Property.new
+    property.name = name
+    property.location = location
+    property.description = description
+    property.price = price
+    property.availability = availability
+    property.user_id = user_id
+    property_repo = PropertyRepository.new
+    property_repo.create(property)
+  end
+
   def my_properties(user_id)
     sql = 'SELECT properties.id, properties.name, properties.location, properties.description, properties.price, users.id AS user_id, properties.availability, users.name AS owner_name, users.email AS owner_email FROM properties JOIN users ON users.id = properties.user_id WHERE user_id = $1;'
     result_set = DatabaseConnection.exec_params(sql, [user_id])
