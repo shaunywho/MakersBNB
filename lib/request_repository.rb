@@ -23,7 +23,7 @@ class RequestsRepository
     end
 
     def find_request(request_id)
-        sql = 'SELECT id, booker_id, lister_id, property_id, date, confirmed FROM requests WHERE id=$1;'
+        sql = 'SELECT id, booker_id, lister_id, property_id, date, confirmed FROM requests WHERE id = $1;'
         sql_param = [request_id]
         result = DatabaseConnection.exec_params(sql,sql_param)
         if result.to_a.length == 0
@@ -117,6 +117,7 @@ class RequestsRepository
         end
     end
 
+
     def confirm_request(request_id,change)
         if change == 1
             sql = "UPDATE requests SET confirmed = 1 WHERE id=$1;"
@@ -126,6 +127,7 @@ class RequestsRepository
         sql_param = [request_id]
         DatabaseConnection.exec_params(sql,sql_param)
 
-        
     end
+
+    
 end

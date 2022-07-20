@@ -105,7 +105,12 @@ class Application < Sinatra::Base
 
   get '/requests/:id' do 
     repo = RequestsRepository.new
-    @requests = repo.requests_for_me(params[:id])
+    repo2 = UserRepository.new
+    repo3 = PropertyRepository.new
+
+    @request_object = repo.find_request(params[:id])
+    @user = repo2.find_id(@request_object.lister_id)
+    @property = repo3.find(@request_object.property_id)
     return erb(:request_id)
   end
 
