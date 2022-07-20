@@ -74,14 +74,25 @@ class Application < Sinatra::Base
       end
       
   end
+
+  get '/create_property' do 
+    return erb(:create_property)
+  end
   
   post '/create_property' do
-    @properties = PropertyRepository.new
-    return redirect('/properties')
+    property = Property.new
+    property.name = params[:name]
+    property.location = params[:location]
+    property.description = params[:description]
+    property.price = params[:price]
+    property.availability = "t"
+    
+    property_repo = PropertyRepository.new
+    property_repo.create(property)
+    return redirect('/properties_page')
   end
 
   post '/create_request' do
-    
       return redirect('/requests_by_me')
   end
 
