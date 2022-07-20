@@ -82,7 +82,7 @@ class Application < Sinatra::Base
   post '/create_property' do
     property_repo = PropertyRepository.new
     property_repo.create_property(params[:name], params[:location], params[:description], params[:price],'t', session[:id])
-    redirect '/properties'
+    redirect('/properties')
   end
 
   post '/create_request' do
