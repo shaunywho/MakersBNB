@@ -76,8 +76,8 @@ class Application < Sinatra::Base
   end
   
   post '/create_property' do
-
-      return redirect('/properties_page')
+    @properties = PropertyRepository.new
+    return redirect('/properties_page')
   end
 
   post '/create_request' do
@@ -85,14 +85,15 @@ class Application < Sinatra::Base
       return redirect('/requests_by_me')
   end
 
-  get '/properties_page' do 
+  get '/properties_page' do
+    @properties = PropertyRepository.new
     # property's details
-    # buttons to user
-    # buttons to request 
     return erb(:properties)
   end
 
-  get 'properties_page/:id' do 
+  get '/properties_page/:id' do
+    # buttons to user
+    # buttons to request  
     return erb(:property_info)
   end 
 
