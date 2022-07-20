@@ -6,7 +6,7 @@ require_relative 'lib/property_repository'
 require_relative 'lib/request_repository'
 
 DatabaseConnection.connect('makersbnb')
-DatabaseConnection.exec(File.read('./seeds/makers_bnb_seeds.sql'))
+#DatabaseConnection.exec(File.read('./seeds/makers_bnb_seeds.sql'))
 
 class Application < Sinatra::Base
   configure :development do
@@ -128,6 +128,27 @@ class Application < Sinatra::Base
 
   end
 
+  get '/requests' do
+    repo = RequestsRepository.new
+    #fix when there are no requests from me for for me
+    #@requests_from_me = repo.requests_from_me(session[:id])
+    if in_session?
+      @requests_from_me = repo.requests_from_me(session[:id])
+      @requests_for_me = repo.requests_for_me(session[:id])
+      return erb(:requests)
+    else
+      return redirect '/'
+    end
+    
+  end
+
+  post 'request_confirmation/:id' do
+    repo = RequestsRepository.new
+    request_param = params[:id]
+    @confirm = repo.confirm_request(request_param, 1)
+
+  end
+  
   get '/logout' do
     session.clear
     return erb(:index)
