@@ -84,30 +84,58 @@ class Application < Sinatra::Base
 
 
   get '/create_property' do 
-    return erb(:create_property)
+    if in_session?
+      return erb(:create_property)
+    else
+      return erb(:index)
+    end
   end
   
   post '/create_property' do
+      property_repo = PropertyRepository.new
+    if in_session?
+      property_repo.create_property(params[:name], params[:location], params[:description], params[:price],'t', session[:id])
+      redirect('/properties')
+    else
+      return erb(:index)
+    end 
+  end
+  
+  post '/create_request' do 
+    request_repo = RequestsRepository.new
     property_repo = PropertyRepository.new
-    property_repo.create_property(params[:name], params[:location], params[:description], params[:price],'t', session[:id])
-    redirect('/properties')
-  end
+    if in_session?
+      @property = property_repo.find(params[:property_id])
+      params = [session[:id], @property.user_id, @property.id, (Date.today.strftime('%Y-%m-%d')).to_s,'0']
+      request_repo.create_request(*params)
+      return redirect('/requests')
+    else 
+      return erb(:index)
+    end
+  end 
 
-  post '/create_request' do
-      return redirect('/requests_by_me')
-  end
 
+  
   get '/properties' do
-    @properties = PropertyRepository.new.all
-    # property's details
-    return erb(:properties)
+      @properties = PropertyRepository.new.all
+      p @properties.length
+    if in_session?
+      # property's details
+      return erb(:properties)
+    else
+      return erb(:index)
+    end 
   end
 
   get '/properties/:id' do
-    @property = PropertyRepository.new.find(params[:id]) 
-    # buttons to user
-    # buttons to request  
-    return erb(:property_id)
+    if in_session?
+      @property = PropertyRepository.new.find(params[:id]) 
+      # buttons to user
+      # buttons to request  
+      return erb(:property_id)
+    else
+      return erb(:index)
+    end 
   end 
 
   post '/requests/:id' do
@@ -138,13 +166,21 @@ class Application < Sinatra::Base
 
 
   
-  get '/requests_to_m' do 
-    return erb(:requests_to_me)
+  get '/requests_to_me' do 
+    if in_session?
+      return erb(:requests_to_me)
+    else
+      return erb(:index)
+    end
   end
 
   post '/requests_to_me/:id' do
+    if in_session?
     # confirm request
-    redirect '/requests_to_me'
+      redirect '/requests_to_me'
+    else
+      return erb(:index)
+    end 
   end
 
   get '/user' do
@@ -176,12 +212,15 @@ class Application < Sinatra::Base
     end
     
   end
-
+  
   post 'request_confirmation/:id' do
     repo = RequestsRepository.new
-    request_param = params[:id]
-    @confirm = repo.confirm_request(request_param, 1)
-
+    if in_session?
+      request_param = params[:id]
+      @confirm = repo.confirm_request(request_param, 1)
+    else
+      return erb(:index)
+    end
   end
   
   get '/logout' do
