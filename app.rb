@@ -31,7 +31,7 @@ class Application < Sinatra::Base
 
   post '/add_photo' do
     tempfile = params[:file][:tempfile] 
-    user = UserRepository.new.find_by_id(session[:id])
+    user = UserRepository.new.find_id(session[:id])
     user_repo = UserRepository.new
     user_repo.add_photo(user, tempfile)
     redirect '/user'
@@ -90,7 +90,7 @@ class Application < Sinatra::Base
   post '/create_property' do
     property_repo = PropertyRepository.new
     property_repo.create_property(params[:name], params[:location], params[:description], params[:price],'t', session[:id])
-    redirect '/properties'
+    redirect('/properties')
   end
 
   post '/create_request' do
@@ -111,15 +111,17 @@ class Application < Sinatra::Base
   end 
 
   get '/requests/:id' do 
+    repo = RequestsRepository.new
+    repo2 = UserRepository.new
+    repo3 = PropertyRepository.new
 
+    @request_object = repo.find_request(params[:id])
+    @user = repo2.find_id(@request_object.lister_id)
+    @property = repo3.find(@request_object.property_id)
+    return erb(:request_id)
   end
 
-  get '/requests' do
-    # lists properties I've requested
-    # shows whether request is confirmed or not
-    # buttons that redirect to properties page/:id
-    return erb(:requests)
-  end
+  
   
   get '/requests_to_m' do 
     return erb(:requests_to_me)
@@ -132,8 +134,8 @@ class Application < Sinatra::Base
 
   get '/user' do
     if in_session?
-      @user = UserRepository.new.find_by_id(session[:id])
-      p @user.profile_picture_path
+      @user = UserRepository.new.find_id(session[:id])
+      
     # user details
     # buttons to properties
     # buttons to request
@@ -150,7 +152,9 @@ class Application < Sinatra::Base
     #@requests_from_me = repo.requests_from_me(session[:id])
     if in_session?
       @requests_from_me = repo.requests_from_me(session[:id])
+      p repo.requests_from_me(session[:id])
       @requests_for_me = repo.requests_for_me(session[:id])
+      p repo.requests_for_me(session[:id])
       return erb(:requests)
     else
       return redirect '/'

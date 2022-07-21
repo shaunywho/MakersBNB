@@ -36,8 +36,7 @@ class UserRepository
             return nil
         end 
     end
-    
-    def find_by_id(id)
+    def find_id(id)
         sql = 'SELECT * FROM users WHERE id = $1;'
         params = [id]
         result = DatabaseConnection.exec_params(sql, params)
@@ -48,8 +47,7 @@ class UserRepository
         else
             return nil
         end 
-    end
-        
+    end 
     def create(user)
         params = [user.name, user.email, user.password]
         result = DatabaseConnection.exec_params("INSERT INTO users (name, email, password) VALUES($1, $2, $3) RETURNING ID;", params)[0]['id']
