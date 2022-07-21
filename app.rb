@@ -138,6 +138,7 @@ class Application < Sinatra::Base
     if in_session? 
       @request_object = repo.find_request(params[:id])
       @user = repo2.find_id(@request_object.lister_id)
+      @user2 = repo2.find_id(@request_object.booker_id)
       @property = repo3.find(@request_object.property_id)
       return erb(:request_id)
     else
