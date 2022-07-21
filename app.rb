@@ -106,7 +106,7 @@ class Application < Sinatra::Base
     property_repo = PropertyRepository.new
     if in_session?
       @property = property_repo.find(params[:property_id])
-      params = [session[:id], @property.user_id, @property.id, (Date.today.strftime('%Y-%m-%d')).to_s,'0']
+      params = [session[:id], @property.user_id, @property.id, (Date.today.strftime('%Y-%m-%d')).to_s,'2']
       request_repo.create_request(*params)
       return redirect('/requests')
     else 
@@ -155,13 +155,20 @@ class Application < Sinatra::Base
   
 
   get '/requests/:id' do 
-    request_repo = RequestsRepository.new
-    user_repo = UserRepository.new
-    property_repo = PropertyRepository.new
-    @request_object = request_repo.find_request(params[:id])
-    @lister = user_repo.find_id(session[:id])
-    @property = property_repo.find(@request_object.property_id)
-    return erb(:request_id)
+    if in_session?
+      request_repo = RequestsRepository.new
+      user_repo = UserRepository.new
+      user2_repo = UserRepository.new
+      property_repo = PropertyRepository.new
+      @request_object = request_repo.find_request(params[:id])
+      @lister = user_repo.find_id(session[:id])
+
+      @booker = user2_repo.find_id(@request_object.booker_id)
+      @property = property_repo.find(@request_object.property_id)
+      return erb(:request_id)
+    else 
+      return erb(:index)
+    end
   end
 
 
