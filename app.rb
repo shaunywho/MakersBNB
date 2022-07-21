@@ -6,7 +6,7 @@ require_relative 'lib/property_repository'
 require_relative 'lib/request_repository'
 
 DatabaseConnection.connect('makersbnb')
-#DatabaseConnection.exec(File.read('./seeds/makers_bnb_seeds.sql'))
+DatabaseConnection.exec(File.read('./seeds/makers_bnb_seeds.sql'))
 
 class Application < Sinatra::Base
   configure :development do
@@ -19,16 +19,23 @@ class Application < Sinatra::Base
   enable :sessions
 
   def in_session?
-    if session[:id] && session[:name] && session[:email] != nil
+    if session[:id] != nil
       return true
     else
       return false
     end 
   end 
-  def set_session(id, name, email)
-    session[:id],session[:name], session[:email] = id, name, email
+  def set_session(id)
+    session[:id] = id
   end 
 
+  post '/add_photo' do
+    tempfile = params[:file][:tempfile] 
+    user = UserRepository.new.find_id(session[:id])
+    user_repo = UserRepository.new
+    user_repo.add_photo(user, tempfile)
+    redirect '/user'
+  end
   get '/' do
     # button to login 
     @error = false
@@ -49,7 +56,7 @@ class Application < Sinatra::Base
     user_repo = UserRepository.new
     user = user_repo.login(email, password)
     if user !=nil
-      set_session(user.id, user.name, user.email)
+      set_session(user.id)
       return redirect '/user'
     else
       @error = true
@@ -66,7 +73,7 @@ class Application < Sinatra::Base
       user_repo = UserRepository.new
       user  = user_repo.signup(name,email,password)
       if user != nil
-        set_session(user.id, user.name, user.email)
+        set_session(user.id)
         return redirect '/user'
       else
         @error = true
@@ -74,6 +81,7 @@ class Application < Sinatra::Base
       end
       
   end
+
 
   get '/create_property' do 
     if in_session?
@@ -130,23 +138,33 @@ class Application < Sinatra::Base
     end 
   end 
 
-  get '/requests/:id' do
-    repo = RequestsRepository.new
-    repo2 = UserRepository.new
-    repo3 = PropertyRepository.new
-
-    if in_session? 
-      @request_object = repo.find_request(params[:id])
-      @user = repo2.find_id(@request_object.lister_id)
-      @user2 = repo2.find_id(@request_object.booker_id)
-      @property = repo3.find(@request_object.property_id)
-      return erb(:request_id)
-    else
-      return erb(:index)
+  post '/requests/:id' do
+    property_repo = PropertyRepository.new
+    request_repo = RequestsRepository.new
+    request_object = request_repo.find_request(params[:id])
+    property = property_repo.find(request_object.property_id)
+    confirm_deny = params[:confirm].to_i
+    if confirm_deny == 1
+      request_repo.find_requests_by_property_id(property.id).each{|request| request_repo.confirm_request(request.id,0)}
+      property_repo.update_availability(property.id, 'f')
     end
+    request_repo.confirm_request(request_object.id, confirm_deny)
+    redirect "/requests/#{params[:id]}"
   end
 
   
+
+  get '/requests/:id' do 
+    request_repo = RequestsRepository.new
+    user_repo = UserRepository.new
+    property_repo = PropertyRepository.new
+    @request_object = request_repo.find_request(params[:id])
+    @lister = user_repo.find_id(session[:id])
+    @property = property_repo.find(@request_object.property_id)
+    return erb(:request_id)
+  end
+
+
   
   get '/requests_to_me' do 
     if in_session?
@@ -167,8 +185,8 @@ class Application < Sinatra::Base
 
   get '/user' do
     if in_session?
-      @name = session[:name]
-      @email = session[:email]
+      @user = UserRepository.new.find_id(session[:id])
+      
     # user details
     # buttons to properties
     # buttons to request

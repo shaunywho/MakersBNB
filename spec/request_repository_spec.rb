@@ -21,7 +21,7 @@ describe RequestsRepository do
             expect(all_requests[0].lister_id).to eq "2"
             expect(all_requests[0].property_id).to eq "2"
             expect(all_requests[0].date).to eq '2011-12-05'
-            expect(all_requests[0].confirmed).to eq "0"
+            expect(all_requests[0].confirmed).to eq "2"
         end
 
         it "returns the first item from the db" do
@@ -32,7 +32,7 @@ describe RequestsRepository do
             expect(all_requests[2].lister_id).to eq "3"
             expect(all_requests[2].property_id).to eq "3"
             expect(all_requests[2].date).to eq '2011-11-05'
-            expect(all_requests[2].confirmed).to eq '1'
+            expect(all_requests[2].confirmed).to eq '2'
         end
     end
 
@@ -45,7 +45,7 @@ describe RequestsRepository do
             expect(request.lister_id).to eq "3"
             expect(request.property_id).to eq "3"
             expect(request.date).to eq '2011-11-05'
-            expect(request.confirmed).to eq "0"
+            expect(request.confirmed).to eq "2"
         end
 
         it "returns request with id 4" do
@@ -56,7 +56,7 @@ describe RequestsRepository do
             expect(request.lister_id).to eq "4"
             expect(request.property_id).to eq "4"
             expect(request.date).to eq '2011-12-05'
-            expect(request.confirmed).to eq "1"
+            expect(request.confirmed).to eq "2"
         end
 
         it "returns nil if no such request is present in db" do
@@ -97,7 +97,7 @@ describe RequestsRepository do
             expect(requests[0].property).to eq "house3"
             expect(requests[0].price).to eq "13.99"
             expect(requests[0].date).to eq "2011-11-05"
-            expect(requests[0].confirmed).to eq "0"
+            expect(requests[0].confirmed).to eq "2"
 
         end
 
@@ -120,7 +120,7 @@ describe RequestsRepository do
             expect(all_requests[0].description).to eq "description2"
             expect(all_requests[0].price).to eq "12.99"
             expect(all_requests[0].date).to eq "2011-12-05"
-            expect(all_requests[0].confirmed).to eq "0"
+            expect(all_requests[0].confirmed).to eq "2"
 
         end
 
