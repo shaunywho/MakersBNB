@@ -41,13 +41,44 @@ class RequestsRepository
         end
     end
 
-    def create_request(request)
-        #creates a new row in the db
-        sql = 'INSERT INTO requests (booker_id,lister_id,property_id,date,confirmed) VALUES ($1,$2,$3,$4,$5)'
-        sql_params = [request.booker_id,request.lister_id,request.property_id,request.date,request.confirmed]
-        DatabaseConnection.exec_params(sql,sql_params)
-        #what happens if user id or lister id doesn't exist?
-        return nil
+    def find_request_by_prop(property_id)
+        sql = 'SELECT id, booker_id, lister_id, property_id, date, confirmed FROM requests WHERE id = $1;'
+        sql_param = [property_id]
+        result = DatabaseConnection.exec_params(sql,sql_param)
+        if result.to_a.length == 0
+            return nil
+        else
+            request = Request.new
+            request.id = result[0]["id"]
+            request.booker_id = result[0]['booker_id']
+            request.lister_id = result[0]['lister_id']
+            request.property_id = result[0]['property_id']
+            request.date = result[0]['date']
+            request.confirmed = result[0]['confirmed']
+
+            return request
+        end
+    end
+
+    def create(request)
+        sql = 'INSERT INTO requests (booker_id, lister_id, property_id, date, confirmed) VALUES ($1, $2, $3, $4, $5);'
+        params = [request.booker_id,
+        request.lister_id,
+        request.property_id,
+        request.date,
+        request.confirmed]
+        DatabaseConnection.exec_params(sql,params)
+    end
+
+    def create_request(booker_id, lister_id, property_id, date, confirmed)
+        request = Request.new
+        request.booker_id = booker_id
+        request.lister_id = lister_id
+        request.property_id = property_id
+        request.date = date
+        request.confirmed = confirmed
+        repo = RequestRepository.new
+        repo.create(request)
     end
 
     def requests_for_me(lister_id)
