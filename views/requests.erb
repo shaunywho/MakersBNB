@@ -15,13 +15,16 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
+          <a class="nav-link" href="/user">My account</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="/properties">Properties</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link disabled" href="#">Requests</a>
+          <a class="nav-link" href="/create_property">Create listing</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/user">My account</a>
+          <a class="nav-link disabled" href="/requests">Requests</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/logout">Logout</a>
@@ -46,7 +49,15 @@
             <h5 class="card-header"><%=request.property%></h5>
             <div class="card-body">
               <h5 class="card-title"><%=request.location%></h5>
-              <p class="card-text">Date of the request: <%=request.date%>, confirmation: <%=request.confirmed%></p>
+              <p class="card-text">Date of the request: <%=request.date%>, confirmation: 
+                <%if request.confirmed == 0%>
+                    Denied
+                <%elsif request.confirmed == 1%>
+                    Confirmed
+                <%else%>
+                    Awaiting Approval
+                <%end%>
+                </p>
               <a href="/requests/<%= request.id%>" class="btn btn-primary">Details</a>
             </div>
           </div>
