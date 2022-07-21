@@ -75,7 +75,7 @@ describe RequestsRepository do
             request.property_id = 5
             request.date = "2011-11-06"
             request.confirmed = 1
-            repo.create_request(request)
+            repo.create_request(request.booker_id, request.lister_id, request.property_id, request.date, request.confirmed)
             last_request = repo.all.last
 
             expect(last_request.booker_id).to eq "1"

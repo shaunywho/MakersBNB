@@ -105,6 +105,8 @@ class Application < Sinatra::Base
       return erb(:index)
     end
   end 
+
+
   
   get '/properties' do
       @properties = PropertyRepository.new.all

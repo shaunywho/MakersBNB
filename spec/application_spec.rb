@@ -87,6 +87,7 @@ RSpec.describe Application do
 
   context 'GET /create_property' do
     it 'gets the create property page' do
+      post('/', email: 'shaunho@gmail.com', password: 'password')
       response = get('/create_property')
       expect(response.status).to eq 200
       expect(response.body).to include("Create Property")
@@ -96,6 +97,7 @@ RSpec.describe Application do
 
   context 'POST /create_property' do
     it "redirects to /properties after pressing the 'create property' button" do
+      post('/', email: 'shaunho@gmail.com', password: 'password')
       response = post('/create_property', name: 'name123', location: 'location123', description: 'fun description', price: 4, availability: 't', user_id: 1)
       expect(response.status).to eq 302
       expect(response).to redirect_to('/properties')
@@ -104,6 +106,7 @@ RSpec.describe Application do
 
   context 'GET /properties' do
     it 'lists all available properties' do
+      post('/', email: 'shaunho@gmail.com', password: 'password')
       response = get('/properties')
       expect(response.status).to eq 200
       expect(response.body).to include('<h1 style="text-align:center">Find A Property</h1>')
