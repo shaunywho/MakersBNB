@@ -73,7 +73,6 @@ RSpec.describe Application do
       expect(response.status).to eq 200
       expect(response.body).to include('<input type="submit" value="Create User"/>')
     end 
-
   end 
       
   context 'GET /user' do
@@ -87,15 +86,37 @@ RSpec.describe Application do
 
   context 'GET /create_property' do
     it 'gets the create property page' do
+      post('/', email: 'shaunho@gmail.com', password: 'password')
       response = get('/create_property')
       expect(response.status).to eq 200
       expect(response.body).to include("Create Property")
       expect(response.body).to include("price")
     end
-  end 
+  end
+  
+  context 'GET /requests' do
+    it 'gets the list requests page' do
+      post('/', email: 'shaunho@gmail.com', password: 'password')
+      response = get('/requests')
+      expect(response.status).to eq 200
+      expect(response.body).to include("Date of the request:")
+      expect(response.body).to include("confirmation:")
+    end
+
+  end
+  
+  context 'POST /create_request' do
+    it 'redirects to /requests page' do
+      post('/', email: 'shaunho@gmail.com', password: 'password')
+      response = post('/create_request', property_id: '1')
+      expect(response.status).to eq 302
+      expect(response).to redirect_to('/requests')
+    end
+  end
 
   context 'POST /create_property' do
     it "redirects to /properties after pressing the 'create property' button" do
+      post('/', email: 'shaunho@gmail.com', password: 'password')
       response = post('/create_property', name: 'name123', location: 'location123', description: 'fun description', price: 4, availability: 't', user_id: 1)
       expect(response.status).to eq 302
       expect(response).to redirect_to('/properties')
@@ -104,6 +125,7 @@ RSpec.describe Application do
 
   context 'GET /properties' do
     it 'lists all available properties' do
+      post('/', email: 'shaunho@gmail.com', password: 'password')
       response = get('/properties')
       expect(response.status).to eq 200
       expect(response.body).to include('<h1 style="text-align:center">Find A Property</h1>')
@@ -112,10 +134,21 @@ RSpec.describe Application do
 
   context 'GET /properties/:id' do
     it 'gets the details for specific property' do
+      post('/', email: 'shaunho@gmail.com', password: 'password')
       response = get('/properties/1')
       expect(response.status).to eq 200
       expect(response.body).to include('<br><h1 style="text-align:center">This is house1 page</h1>')
       expect(response.body).to include('<dt>Price per night:</dt>')
+    end
+  end
+
+  context 'GET /requests/:id' do
+    it 'gets the details for specific request' do
+      post('/', email: 'shaunho@gmail.com', password: 'password')
+      response = get('/requests/1')
+      expect(response.status).to eq 200
+      expect(response.body).to include('Property name: house2')
+      expect(response.body).to include('Property location: place2')
     end
   end
 end 
