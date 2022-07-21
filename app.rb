@@ -6,7 +6,7 @@ require_relative 'lib/property_repository'
 require_relative 'lib/request_repository'
 
 DatabaseConnection.connect('makersbnb')
-#DatabaseConnection.exec(File.read('./seeds/makers_bnb_seeds.sql'))
+DatabaseConnection.exec(File.read('./seeds/makers_bnb_seeds.sql'))
 
 class Application < Sinatra::Base
   configure :development do
@@ -103,18 +103,33 @@ class Application < Sinatra::Base
     return erb(:property_id)
   end 
 
-  get '/requests/:id' do 
-    repo = RequestsRepository.new
-    repo2 = UserRepository.new
-    repo3 = PropertyRepository.new
-
-    @request_object = repo.find_request(params[:id])
-    @user = repo2.find_id(@request_object.lister_id)
-    @property = repo3.find(@request_object.property_id)
-    return erb(:request_id)
+  post '/requests/:id' do
+    property_repo = PropertyRepository.new
+    request_repo = RequestsRepository.new
+    request_object = request_repo.find_request(params[:id])
+    property = property_repo.find(request_object.property_id)
+    confirm_deny = params[:confirm].to_i
+    if confirm_deny == 1
+      request_repo.find_requests_by_property_id(property.id).each{|request| request_repo.confirm_request(request.id,0)}
+      property_repo.update_availability(property.id, 'f')
+    end
+    request_repo.confirm_request(request_object.id, confirm_deny)
+    redirect "/requests/#{params[:id]}"
   end
 
   
+
+  get '/requests/:id' do 
+    request_repo = RequestsRepository.new
+    user_repo = UserRepository.new
+    property_repo = PropertyRepository.new
+    @request_object = request_repo.find_request(params[:id])
+    @lister = user_repo.find_id(session[:id])
+    @property = property_repo.find(@request_object.property_id)
+    return erb(:request_id)
+  end
+
+
   
   get '/requests_to_m' do 
     return erb(:requests_to_me)

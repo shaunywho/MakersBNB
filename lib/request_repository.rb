@@ -129,5 +129,44 @@ class RequestsRepository
 
     end
 
+    def find_requests_by_property_id(property_id)
+        sql ='SELECT requests.id,
+		properties.name AS property,
+		properties.location,
+		properties.description,
+		properties.price,
+		requests.date,
+		requests.confirmed
+        FROM requests
+        JOIN properties ON properties.id = requests.property_id
+        JOIN users ON users.id = requests.booker_id
+        WHERE properties.id = $1;'
+        result_set = DatabaseConnection.exec_params(sql,[property_id])
+        requests = []
+        if result_set.to_a.length == 0
+            return nil
+        else
+            result_set.each do |result|
+                request = entry_to_request(result)
+                requests << request
+            end 
+        end
+        return requests 
+
+
+    end
     
+
+    def entry_to_request(entry)
+        request = Request.new
+        request.id = entry["id"]
+        request.property = entry['property']
+        request.location = entry['location']
+        request.description = entry['description']
+        request.price = entry['price']
+        request.date = entry['date']
+        request.confirmed = entry['confirmed']
+        return request
+
+    end 
 end
