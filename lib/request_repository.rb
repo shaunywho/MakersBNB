@@ -77,7 +77,7 @@ class RequestsRepository
         request.property_id = property_id
         request.date = date
         request.confirmed = confirmed
-        repo = RequestRepository.new
+        repo = RequestsRepository.new
         repo.create(request)
     end
 

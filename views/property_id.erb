@@ -30,7 +30,10 @@
 
 <br><h1 style="text-align:center">This is <%=@property.name%> page</h1>
 <div class="container">
-  <a class="btn btn-primary" href="/create_request" role="button">Create Request</a><br><br>
+
+<form>
+<button type="submit" name="property_id" value='<%=@property.id%>' formmethod='GET' formaction='/create_request'>Create Request</button>
+</form><br></br>
     <div class="row align-items-center">
         <div class="col-6 mx-auto">
             <div class="card shadow border">

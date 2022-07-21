@@ -112,6 +112,7 @@ RSpec.describe Application do
 
   context 'GET /properties/:id' do
     it 'gets the details for specific property' do
+      post('/', email: 'shaunho@gmail.com', password: 'password')
       response = get('/properties/1')
       expect(response.status).to eq 200
       expect(response.body).to include('<br><h1 style="text-align:center">This is house1 page</h1>')
