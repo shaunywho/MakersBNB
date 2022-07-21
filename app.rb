@@ -42,12 +42,13 @@ class Application < Sinatra::Base
     return erb(:index) # form for login in and redirect to user page
   end 
   
-  get '/signup' do 
+  get '/signup' do
     if in_session?
+      @user = UserRepository.new.find_id(session[:id])
       return erb(:user)
-    else 
+    else
       return erb(:signup) # form for signup and redirect to user page
-    end 
+    end
   end
   
   post '/' do
@@ -124,7 +125,6 @@ class Application < Sinatra::Base
     redirect "/requests/#{params[:id]}"
   end
 
-  
 
   get '/requests/:id' do 
     request_repo = RequestsRepository.new

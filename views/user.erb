@@ -15,31 +15,68 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="/logout">Logout</a>
+          <a class="nav-link disabled" href="/user">My account</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/properties">Properties</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/create_property">Create listing</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/requests">Requests</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/properties">Properties</a>
+          <a class="nav-link" href="/logout">Logout</a>
         </li>
       </ul>
     </div>
   </div>
 </nav>
 
-<h1>This is a User page</h1>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-<p>
-  <img src="<%=@user.profile_picture_path%>">
-</p>
-<div>
-    <p>Name: <%= @user.name %> </p>
-    <p>Email: <%= @user.email %></p>
+<div class="container text-center">
+  <div class="row">
+      <div class="col">
+      </div>
+      <div class="col-6">
+        <h1 style="margin-top:10px; margin-bottom:10px;">Welcome!</h1>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+        <p>
+          <img src="<%=@user.profile_picture_path%>" width="300" height="auto">
+        </p>
+      </div>
+      <div class="col">
+      </div>
+  </div>
+
+  <div class="row">
+      <div class="col">
+      </div>
+      <div class="col-6">
+
+          <div class="card" style="margin-bottom:20px;">
+            <div class="card-header" style="font-size:20px;">
+              <b>Account Details</b>
+            </div>
+            <div class="card-body">
+              <blockquote class="blockquote mb-0">
+                <p style="font-size:18px;">Name: <%= @user.name %></p>
+                <p style="font-size:18px;">Email: <%= @user.email %></p>
+              </blockquote>
+            </div>
+            <div class="card-body" style="font-size:18px;">
+              <blockquote class="blockquote mb-0">
+                <form action='/add_photo' enctype="multipart/form-data" method='POST'>
+                  <input name="file" type="file" />
+                  <input type="submit" value="Upload" />
+                </form>
+              </blockquote>
+            </div>
+          </div>
+      </div>
+      <div class="col">
+      </div>
+  </div>
 </div>
-<form action='/add_photo' enctype="multipart/form-data" method='POST'>
-    <input name="file" type="file" />
-    <input type="submit" value="Upload" />
-</form>
 </body>
 </html>
