@@ -106,7 +106,7 @@ RSpec.describe Application do
     it 'lists all available properties' do
       response = get('/properties')
       expect(response.status).to eq 200
-      expect(response.body).to include('<h2>Find a Property</h2>')
+      expect(response.body).to include('<h1 style="text-align:center">Find A Property</h1>')
     end 
   end
 
@@ -114,8 +114,8 @@ RSpec.describe Application do
     it 'gets the details for specific property' do
       response = get('/properties/1')
       expect(response.status).to eq 200
-      expect(response.body).to include('<p>Description: description1</p>')
-      expect(response.body).to include('<p>Price per night: 9.99</p>')
+      expect(response.body).to include('<br><h1 style="text-align:center">This is house1 page</h1>')
+      expect(response.body).to include('<dt>Price per night:</dt>')
     end
   end
 end 
