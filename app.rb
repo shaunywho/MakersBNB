@@ -93,14 +93,14 @@ class Application < Sinatra::Base
     end 
   end
   
-  get '/create_request' do 
+  post '/create_request' do 
     request_repo = RequestsRepository.new
     property_repo = PropertyRepository.new
     if in_session?
       @property = property_repo.find(params[:property_id])
       params = [session[:id], @property.user_id, @property.id, (Date.today.strftime('%Y-%m-%d')).to_s,'0']
       request_repo.create_request(*params)
-      return erb(:create_request)
+      return redirect('/requests')
     else 
       return erb(:index)
     end
