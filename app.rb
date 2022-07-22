@@ -210,14 +210,11 @@ class Application < Sinatra::Base
     #@requests_from_me = repo.requests_from_me(session[:id])
     if in_session?
       @requests_from_me = repo.requests_from_me(session[:id])
-      p repo.requests_from_me(session[:id])
       @requests_for_me = repo.requests_for_me(session[:id])
-      p repo.requests_for_me(session[:id])
       return erb(:requests)
     else
       return redirect '/'
     end
-    
   end
   
   post 'request_confirmation/:id' do

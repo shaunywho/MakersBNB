@@ -50,9 +50,9 @@
             <div class="card-body">
               <h5 class="card-title"><%=request.location%></h5>
               <p class="card-text">Date of the request: <%=request.date%>, confirmation: 
-                <%if request.confirmed == 0%>
+                <%if request.confirmed == "0"%>
                     Denied
-                <%elsif request.confirmed == 1%>
+                <%elsif request.confirmed == "1"%>
                     Confirmed
                 <%else%>
                     Awaiting Approval
@@ -82,7 +82,15 @@
               <h5 class="card-header"><%=request.property%></h5>
               <div class="card-body">
                 <h5 class="card-title"><%=request.location%></h5>
-                <p class="card-text">Date of the request: <%=request.date%>, confirmation: <%=request.confirmed%></p>
+                <p class="card-text">Date of the request: <%=request.date%>, confirmation:
+                <%if request.confirmed == "0"%>
+                    Denied
+                <%elsif request.confirmed == "1"%>
+                    Confirmed
+                <%else%>
+                    Awaiting Approval
+                <%end%>
+                </p>
                 <a href="/requests/<%= request.id%>" class="btn btn-primary">Details</a>
               </div>
             </div>
