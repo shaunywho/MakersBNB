@@ -34,32 +34,27 @@
   </div>
 </nav>
 
-<br><h1 style="text-align:center">This is <%=@property.name%> page</h1>
-<div class="container">
 
-<form>
-<button type="submit" name="property_id" value='<%=@property.id%>' formmethod='POST' formaction='/create_request'>Create Request</button>
-</form><br></br>
+
+
     <div class="row align-items-center">
-        <div class="col-6 mx-auto">
+        <div class="col-6 mx-auto" style="margin-top:60px;">
             <div class="card shadow border">
+              <div class="card-header"><h1 style="text-align:center">This is <%=@property.name%> page</h1></div>
                 <div class="card-body d-flex flex-column align-items-left">
                   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
                     <div>
                         <dl>
-                          <dt>Location:</dt> 
-                            <dd>- <%= @property.location %> </dd>
-                          <dt>Description:</dt> 
-                            <dd>- <%= @property.description %></dd>
-                          <dt>Price per night:</dt> 
-                            <dd>- <%= @property.price%></dd>
-                          <dt>Availability:</dt> 
-                            <dd>- <%= @property.availability%></dd>
-                          <dt>Email:</dt> 
-                            <dd>- <%= @property.owner_email %></dd>
-                          <dt>Owner:</dt> 
-                            <dd>- <%= @property.owner_name %></dd>
+                          <p><b>Location:</b> <%= @property.location %> </p>
+                          <p><b>Description:</b> <%= @property.description %></p>
+                          <p><b>Price per night:</b> <%= @property.price%></p>
+                          <p><b>Availability:</b> <%= @property.availability%></p>
+                          <p><b>Email:</b> <%= @property.owner_email %></p>
+                          <p><b>Owner:</b> <%= @property.owner_name %></p>
                         <dl>
+                        <form>
+<button class="btn btn-primary" type="submit" name="property_id" value='<%=@property.id%>' formmethod='POST' formaction='/create_request'>Create Request</button>
+</form><br></br>
                     </div>
                   </div>
             </div>
